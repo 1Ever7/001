@@ -1,0 +1,91 @@
+/* Estilos para el contenedor principal */
+.container {
+    display: flex;
+    height: 100vh; /* Altura total de la ventana */
+    margin: 0;
+}
+
+/* Estilos para el menú */
+.menu {
+    width: 190px; /* Ancho del menú y lista */
+    position: relative;
+    padding-right: 50px;
+    background-color: aqua;
+    
+}
+
+/* Estilos para la lista desordenada */
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+        
+}
+
+/* Estilos para los enlaces */
+.menu li a {
+    display: block;
+    padding: 10px;
+    width: 220px; 
+    background-color: #add8e6; /* Color de fondo del botón */
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease; /* Transición suave */
+    margin: 0 0 8px 0; /* Márgenes superior e inferior para separación entre botones */
+    border-radius: 5px; /* Esquinas redondeadas */
+}
+
+/* Cambio de color al colocar el cursor */
+.menu li a:hover {
+    background-color: #f0f0f0; /* Color de fondo al colocar el cursor */
+}
+
+/* Estilos para la línea vertical */
+.linea-vertical-container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: 10px; /* Ancho de la línea y del fondo de color */
+}
+
+.linea-vertical {
+    height: 100%;
+    background-color: aqua; /* Color de la línea */
+}
+
+.fondo-color {
+    position: absolute;
+    top: 0;
+    left: -10px; /* Ajusta el fondo de color a la izquierda */
+    height: 100%;
+    width: 10px; /* Ancho del fondo de color */
+    background-color: aquamarine; /* Color de fondo hacia la izquierda */
+    z-index: -1; /* Coloca el fondo de color detrás de la línea vertical */
+}
+
+
+/* Estilos para el contenido */
+.contenido {
+    background-image: url('imagenes/ani.jpeg');
+            background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
+            background-repeat: no-repeat; /* Evita la repetición de la imagen */
+    flex-grow: 1; /* Permite que el contenido ocupe todo el espacio disponible */
+    margin-left: 20px; /* Espacio entre el menú y el contenido */
+    position: relative;
+}
+
+.contenido iframe {
+    width: 100%;
+    height: 100%; /* El contenido ocupa toda la altura disponible */
+    border: none; /* Elimina el borde del iframe */
+
+            
+
+}
+
+/* Estilos para el título */
+h1 {
+    padding-bottom: 10px;
+    margin: 0; /* Elimina el margen por defecto */
+}
