@@ -3,8 +3,10 @@ package com.emergentes.dao;
 import com.emergentes.conDB.ConexionDB;
 import com.emergentes.modelos.Consulta;
 import com.emergentes.modelos.DetalleConsulta;
+import com.emergentes.modelos.Doctor;
 import com.emergentes.modelos.Especialidad;
 import com.emergentes.modelos.MedicalConsulta;
+import com.emergentes.modelos.contarconsultas;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -417,6 +419,48 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         }
 
         return idDoctor;
+    }
+
+    @Override
+    public List<contarconsultas> getReporteConsultas() throws Exception {
+        List<contarconsultas> lista = new ArrayList<>();
+     
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConexionDB.getConnection();
+            String sql = "SELECT e.nombre AS especialidad, mc.createdate AS fecha_consulta, COUNT(mc.id) AS total_consultas "
+                    + "FROM public.medical_consulta mc "
+                    + "JOIN public.doctor d ON mc.id_doctor = d.id "
+                    + "JOIN public.especialidad e ON d.id_especialidad = e.id "
+                    + "GROUP BY e.nombre, mc.createdate "
+                    + "ORDER BY e.nombre, mc.createdate";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                contarconsultas reporte = new contarconsultas();
+                reporte.setEspecie(rs.getString("especialidad"));
+                reporte.setFecha(rs.getDate("fecha_consulta"));
+                reporte.setTotal(rs.getInt("total_consultas"));
+                lista.add(reporte);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            // Cerrar conexiones
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        return lista;
+        }
+    
     }
 
 }

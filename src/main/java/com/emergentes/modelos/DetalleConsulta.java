@@ -11,11 +11,20 @@ package com.emergentes.modelos;
  */
 public class DetalleConsulta {
     private int id;
-    private int idMedCon;
+    private String idMedCon;
     private String diagnostic;
     private String treatment;
+    private String date;
 
     public DetalleConsulta() {
+    }
+
+    public DetalleConsulta(int id, String idMedCon, String diagnostic, String treatment, String date) {
+        this.id = id;
+        this.idMedCon = idMedCon;
+        this.diagnostic = diagnostic;
+        this.treatment = treatment;
+        this.date = date;
     }
 
     public int getId() {
@@ -26,11 +35,11 @@ public class DetalleConsulta {
         this.id = id;
     }
 
-    public int getIdMedCon() {
+    public String getIdMedCon() {
         return idMedCon;
     }
 
-    public void setIdMedCon(int idMedCon) {
+    public void setIdMedCon(String idMedCon) {
         this.idMedCon = idMedCon;
     }
 
@@ -49,6 +58,15 @@ public class DetalleConsulta {
     public void setTreatment(String treatment) {
         this.treatment = treatment;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
     
     
 }

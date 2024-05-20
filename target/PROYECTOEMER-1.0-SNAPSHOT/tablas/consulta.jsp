@@ -16,35 +16,35 @@
         <meta charset="UTF-8">
         <title>Consulta Detallada</title>
         <style>
-             body {
-            background-image: url('../imagenes/ani.jpeg');
-            background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
-            background-repeat: no-repeat; /* Evita la repetición de la imagen */
-             }
+            body {
+                background-image: url('../imagenes/ani.jpeg');
+                background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
+                background-repeat: no-repeat; /* Evita la repetición de la imagen */
+            }
             .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
-            background-color: #fff; /* Establece un color de fondo para la tabla */
-        }
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid #ddd;
+                background-color: #fff; /* Establece un color de fondo para la tabla */
+            }
 
-        .styled-table th, .styled-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
+            .styled-table th, .styled-table td {
+                padding: 10px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
 
-        .styled-table th {
-            background-color: #f2f2f2;
-        }
+            .styled-table th {
+                background-color: #f2f2f2;
+            }
 
-        .styled-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+            .styled-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
 
-        .styled-table tr:hover {
-            background-color: #f2f2f2;
-        }
+            .styled-table tr:hover {
+                background-color: #f2f2f2;
+            }
             /* Estilos para botones */
             .styled-button {
                 padding: 8px 12px;
@@ -134,7 +134,7 @@
     </head>
     <body>
 
-        <h2>Detalles de la Consulta</h2>
+        <h2>Consultas</h2>
         <form action="MainServlet3" method="post" class="container" >
             <label for="fecha" class="label-input">Buscar por fecha:</label>
             <input type="date" id="fecha" name="fecha" class="date-input">
@@ -142,7 +142,12 @@
             <button class="styled-button bus" type="submit">Buscar</button>
         </form>
         <h1> </h1>
-
+        <form action="servletpdfmedi" method="get">
+            <input type="submit" value="Generar Reporte PDF Historial Medico">
+        </form>
+        <form action="servletconmed" method="get">
+            <input type="submit" value="Generar Reporte PDF Atencion Medica">
+        </form>
         <c:if test="${not empty detalles}">
             <table class="styled-table">
                 <thead>

@@ -11,39 +11,39 @@
         <meta charset="UTF-8">
         <title>Detalles del Doctor</title>
         <style>
-             body {
-            background-image: url('../imagenes/ani.jpeg');
-            background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
-            background-repeat: no-repeat; /* Evita la repetición de la imagen */
-             }
-            
-             
-             .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
-            background-color: #fff; /* Establece un color de fondo para la tabla */
-        }
+            body {
+                background-image: url('../imagenes/ani.jpeg');
+                background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
+                background-repeat: no-repeat; /* Evita la repetición de la imagen */
+            }
 
-        .styled-table th, .styled-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
 
-        .styled-table th {
-            background-color: #f2f2f2;
-        }
+            .styled-table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid #ddd;
+                background-color: #fff; /* Establece un color de fondo para la tabla */
+            }
 
-        .styled-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+            .styled-table th, .styled-table td {
+                padding: 10px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
 
-        .styled-table tr:hover {
-            background-color: #f2f2f2;
-        }
-        
-        
+            .styled-table th {
+                background-color: #f2f2f2;
+            }
+
+            .styled-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            .styled-table tr:hover {
+                background-color: #f2f2f2;
+            }
+
+
             /* Estilos para botones */
             .styled-button {
                 padding: 8px 12px;
@@ -122,7 +122,7 @@
                 width: 0px;
                 height: 0px;
             }
-            
+
             .bus{
                 background-color: #add8e6;
                 color: #333;
@@ -132,7 +132,7 @@
         </style>
     </head>
     <body>
-        <h1>Detalles del Doctor</h1>
+        <h1>Detalles del Paciente</h1>
         <table class="styled-table">
             <thead>
                 <tr>
@@ -153,6 +153,11 @@
                         <td>${pacientes.dni}</td>
                         <td>${pacientes.numberClinicalHistory}</td>
                         <td>
+
+                            <form action="Servletpdf" method="post" target="_blank">
+                                <input type="hidden" name="id" value="${pacientes.id}">
+                                <button type="submit" class="styled-button">Generar Historial</button>
+                            </form>
                             <form action="MainServlet2?action=ver" method="post">
                                 <input type="hidden" name="action" value="ver">
                                 <input type="hidden" name="id" value="${pacientes.id}">
@@ -172,5 +177,7 @@
             <input type="hidden" name="action" value="insertar">
             <button type="submit"class="styled-button agregar-button">Agregar Paciente</button>
         </form>
+
+
     </body>
 </html>

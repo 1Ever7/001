@@ -7,6 +7,7 @@ package com.emergentes.dao;
 
 import com.emergentes.conDB.ConexionDB;
 import static com.emergentes.conDB.ConexionDB.getConnection;
+import com.emergentes.modelos.DetalleConsulta;
 import com.emergentes.modelos.Paciente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class pacienteDAOimpl extends ConexionDB implements pacienteDAO{
+public class pacienteDAOimpl extends ConexionDB implements pacienteDAO {
 
     @Override
     public void insert(Paciente paciente) throws Exception {
@@ -29,7 +30,7 @@ public class pacienteDAOimpl extends ConexionDB implements pacienteDAO{
             ps.setString(3, paciente.getDni());
             ps.setString(4, paciente.getNumberClinicalHistory());
             ps.executeUpdate();
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw e;
         } finally {
             //Connection conn = null;
@@ -130,7 +131,7 @@ public class pacienteDAOimpl extends ConexionDB implements pacienteDAO{
                 paciente.setNumberClinicalHistory(rs.getString("numberclinicalhistory"));
                 pacientes.add(paciente);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw e;
         } finally {
             //Connection conn = null;
@@ -139,4 +140,40 @@ public class pacienteDAOimpl extends ConexionDB implements pacienteDAO{
         }
         return pacientes;
     }
+
+    @Override
+    public List<DetalleConsulta> getAnte(int id) throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<DetalleConsulta> listaConsultas = new ArrayList<>(); // Lista para almacenar los objetos DetalleConsulta
+        try {
+            conn = getConnection();
+            String sql = "SELECT dc.id, e.nombre AS nombre_especialidad, diagnostic, treatment, mc.createdate "
+                    + "FROM detalle_consulta dc "
+                    + "INNER JOIN medical_consulta mc ON dc.id_medcon = mc.id "
+                    + "INNER JOIN paciente p ON p.id = mc.id_paciente "
+                    + "INNER JOIN doctor d ON mc.id_doctor = d.id "
+                    + "INNER JOIN especialidad e ON d.id_especialidad = e.id "
+                    + "WHERE p.id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                DetalleConsulta conde = new DetalleConsulta(); // Crear un nuevo objeto DetalleConsulta en cada iteración
+                conde.setId(rs.getInt("id"));
+                conde.setIdMedCon(rs.getString("nombre_especialidad"));
+                conde.setDiagnostic(rs.getString("diagnostic"));
+                conde.setTreatment(rs.getString("treatment"));
+                conde.setDate(rs.getString("createdate"));
+                listaConsultas.add(conde); // Agregar el objeto DetalleConsulta a la lista
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.desconectar(conn);
+        }
+        return listaConsultas; // Devolver la lista completa de DetalleConsulta
+    }
+
 }
