@@ -111,7 +111,9 @@
                     <td>${user.role}</td>
                     <td class="actions">
                         <a href="userservlet?action=edit&id=${user.id}" class="edit">Editar</a>
-                        <a href="userservlet?action=delete&id=${user.id}" class="delete">Eliminar</a>
+                       <c:if test="${user.role != 'Admin'}">
+                            <a href="userservlet?action=delete&id=${user.id}" class="delete">Eliminar</a>
+                        </c:if>
                     </td>
                 </tr>
             </c:forEach>

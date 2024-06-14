@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class ConexionDB {
     private static final String DRIVER = "org.postgresql.Driver";
+    //database-2.clis4mwienqh.us-east-2.rds.amazonaws.com el localhost
     private static final String URL = "jdbc:postgresql://localhost:5433/hospital";
     private static final String USER = "postgres";
     private static final String PASSWORD = "123";

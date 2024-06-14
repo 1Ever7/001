@@ -27,7 +27,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.sun.org.apache.xml.internal.serializer.ElemDesc;
+//import com.sun.org.apache.xml.internal.serializer.ElemDesc;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

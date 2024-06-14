@@ -2,6 +2,7 @@ package com.emergentes.dao;
 
 import com.emergentes.modelos.Consulta;
 import com.emergentes.modelos.Especialidad;
+import com.emergentes.modelos.Paciente;
 import com.emergentes.modelos.contarconsultas;
 
 import java.sql.Date;
@@ -24,5 +25,6 @@ public interface consultaDAO {
     
     public List<contarconsultas> getReporteConsultas() throws Exception ;
     
+    public List<Paciente> getAllp()throws Exception;
     
 }

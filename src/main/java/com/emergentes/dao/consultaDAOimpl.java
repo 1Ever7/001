@@ -6,6 +6,7 @@ import com.emergentes.modelos.DetalleConsulta;
 import com.emergentes.modelos.Doctor;
 import com.emergentes.modelos.Especialidad;
 import com.emergentes.modelos.MedicalConsulta;
+import com.emergentes.modelos.Paciente;
 import com.emergentes.modelos.contarconsultas;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,20 +23,30 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String sql = "SELECT agregar_consulta(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "WITH paciente_cte AS ("
+                + "    SELECT id "
+                + "    FROM paciente "
+                + "    WHERE firstname = ? AND lastname = ?"
+                + "),"
+                + "insert_medical_consulta AS ("
+                + "    INSERT INTO medical_consulta (id_doctor, id_paciente, createdate)"
+                + "    VALUES (?, (SELECT id FROM paciente_cte), ?)"
+                + "    RETURNING id AS nueva_consulta_id"
+                + ")"
+                + "INSERT INTO detalle_consulta (id_medcon, diagnostic, treatment, celular, analisis_medico)"
+                + "VALUES ((SELECT nueva_consulta_id FROM insert_medical_consulta), ?, ?, ?, ?);";
         try {
             conn = getConnection();
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, cons.getNombrePaciente());
             ps.setString(2, cons.getApellidoPaciente());
-            ps.setDate(3, cons.getFechaConsulta());
-            ps.setString(4, cons.getDiagnostico());
-            ps.setString(5, cons.getTratamiento());
-            ps.setString(6, cons.getCel());
-            ps.setString(7, cons.getGptcon());
-            //ps.setInt(8, cons.getIdoc());
-            ps.setInt(8, cons.getIdoc());
+            ps.setInt(3, cons.getIdoc());
+            ps.setDate(4, cons.getFechaConsulta());
+            ps.setString(5, cons.getDiagnostico());
+            ps.setString(6, cons.getTratamiento());
+            ps.setString(7, cons.getCel());
+            ps.setString(8, cons.getGptcon());
 
             ps.execute();
         } catch (Exception e) {
@@ -51,24 +62,45 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
     public void update(Consulta detalle) throws Exception {
         Connection conn = null;
         PreparedStatement ps = null;
-        String sql = "SELECT actualizar_consulta(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "WITH paciente_cte AS ("
+                + "    SELECT id "
+                + "    FROM paciente "
+                + "    WHERE id = ? AND firstname = ? AND lastname = ?"
+                + "),"
+                + "update_medical_consulta AS ("
+                + "    UPDATE medical_consulta mc "
+                + "    SET createdate = ?,"
+                + "        id_doctor = ?"
+                + "    FROM paciente_cte"
+                + "    WHERE mc.id_paciente = paciente_cte.id AND mc.id = ?"
+                + "    RETURNING mc.id_paciente )  "
+                + "UPDATE detalle_consulta dc "
+                + "SET diagnostic = ?,"
+                + "    treatment = ?,"
+                + "    celular = ?,"
+                + "    analisis_medico = ? "
+                + "WHERE dc.id_medcon IN ("
+                + "    SELECT id FROM medical_consulta "
+                + "    WHERE id_paciente IN (SELECT id FROM paciente_cte)"
+                + ") AND dc.id = ?";
+
         try {
             //int idEspecialidad = obtenerIdEspecialidadPorDoctor(detalle.getIdoc());
 
             conn = getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, detalle.getId());
-            ps.setInt(2, detalle.getMedicalConsultaId());
-            ps.setInt(3, detalle.getDetalleConsultaId());
-            ps.setString(4, detalle.getNombrePaciente());
-            ps.setString(5, detalle.getApellidoPaciente());
-            ps.setDate(6, detalle.getFechaConsulta());
+            ps.setString(2, detalle.getNombrePaciente());
+            ps.setString(3, detalle.getApellidoPaciente());
+            ps.setDate(4, detalle.getFechaConsulta());
+            ps.setInt(5, detalle.getIdoc());
+            ps.setInt(6, detalle.getMedicalConsultaId());
             ps.setString(7, detalle.getDiagnostico());
             ps.setString(8, detalle.getTratamiento());
             ps.setString(9, detalle.getCel());
             ps.setString(10, detalle.getGptcon());
-            ps.setInt(11, detalle.getIdoc());
-            ps.execute();
+            ps.setInt(11, detalle.getDetalleConsultaId());
+            ps.executeUpdate();
         } catch (Exception e) {
             throw e;
         } finally {
@@ -84,7 +116,9 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         PreparedStatement ps = null;
         try {
             conn = getConnection();
-            String sql = "SELECT eliminar_consulta(? , ?);";
+            String sql = "DELETE FROM medical_consulta "
+                    + "USING detalle_consulta "
+                    + "WHERE medical_consulta.id = ? AND detalle_consulta.id = ? ";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, medicalConsultaId);
             ps.setInt(2, detalleConsultaId);
@@ -161,11 +195,13 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         ResultSet rs = null;
         try {
             conn = getConnection();
-            String sql = "SELECT p.id AS id,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico"
-                    + ",mc.id AS medicalConsultaId,dc.id AS detalleConsultaId,mc.id_doctor as idoc"
+            String sql = "SELECT p.id AS id,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico, e.nombre AS especialidad"
+                    + ",mc.id AS medicalConsultaId,dc.id AS detalleConsultaId,mc.id_doctor as idoc "
                     + "FROM paciente p "
                     + "INNER JOIN medical_consulta mc ON p.id = mc.id_paciente "
-                    + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon";
+                    + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon "
+                    + "INNER JOIN doctor doc ON mc.id_doctor = doc.id "
+                    + "INNER JOIN especialidad e ON doc.id_especialidad = e.id ";
 
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -182,7 +218,8 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
                         rs.getString("treatment"),
                         rs.getString("celular"),
                         rs.getString("analisis_medico"),
-                        rs.getInt("idoc")
+                        rs.getInt("idoc"),
+                        rs.getString("espe")
                 );
 
                 detalles.add(detalle);
@@ -206,11 +243,11 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         ResultSet rs = null;
         try {
             conn = getConnection();
-            String sql = "SELECT p.id AS id , mc.id AS medicalConsultaId ,dc.id AS detalleConsultaId,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico "
+            String sql = "SELECT p.id AS id , mc.id AS medicalConsultaId ,dc.id AS detalleConsultaId,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico, mc.id_doctor as idoc "
                     + "FROM paciente p "
                     + "INNER JOIN medical_consulta mc ON p.id = mc.id_paciente "
                     + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon "
-                    + "WHERE p.id = ? AND mc.id = ? AND dc.id = ? AND p.firstname = ? AND p.lastname = ?";
+                    + "WHERE p.id = ? AND mc.id = ? AND dc.id = ? AND p.firstname = ? AND p.lastname = ? ";
 
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -231,6 +268,7 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
                 detalles.setTratamiento(rs.getString("treatment"));
                 detalles.setCel(rs.getString("celular"));
                 detalles.setGptcon(rs.getString("analisis_medico"));
+                detalles.setIdoc(rs.getInt("idoc"));
 
             }
         } catch (Exception e) {
@@ -260,7 +298,7 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
                     + ",mc.id AS medicalConsultaId,dc.id AS detalleConsultaId,mc.id_doctor as idoc "
                     + "FROM paciente p "
                     + "INNER JOIN medical_consulta mc ON p.id = mc.id_paciente "
-                    + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon";
+                    + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -285,6 +323,7 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
                     + "FROM especialidad es "
                     + "INNER JOIN doctor doc ON es.id = doc.id_especialidad "
                     + "INNER JOIN medical_consulta mc ON doc.id = mc.id_doctor";
+
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -315,7 +354,7 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
 
         try {
             conn = getConnection();
-            String sql = "SELECT id FROM especialidad WHERE nombre = ?)";
+            String sql = "SELECT id FROM especialidad WHERE nombre = ? ";
             ps = conn.prepareStatement(sql);
             ps.setString(1, nombreEspecialidad);
             rs = ps.executeQuery();
@@ -424,7 +463,7 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
     @Override
     public List<contarconsultas> getReporteConsultas() throws Exception {
         List<contarconsultas> lista = new ArrayList<>();
-     
+
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -458,9 +497,36 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
             if (conn != null) {
                 conn.close();
             }
-        return lista;
+            return lista;
         }
-    
+
+    }
+
+    @Override
+    public List<Paciente> getAllp() throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Paciente> pacientes = new ArrayList<>();
+        try {
+            conn = getConnection();
+            String sql = "SELECT firstname,lastname FROM paciente";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Paciente paciente = new Paciente();
+                paciente.setFirstname(rs.getString("firstname"));
+                paciente.setLastname(rs.getString("lastname"));
+                pacientes.add(paciente);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            //Connection conn = null;
+            this.desconectar(conn);
+
+        }
+        return pacientes;
     }
 
 }

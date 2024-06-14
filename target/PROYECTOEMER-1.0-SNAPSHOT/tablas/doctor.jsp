@@ -1,7 +1,8 @@
 <%@page import="com.emergentes.modelos.Doctor"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="java.util.ArrayList"%>
+
 
 
 <!DOCTYPE html>
@@ -10,36 +11,36 @@
         <meta charset="UTF-8">
         <title>Detalles del Doctor</title>
         <style>
-             body {
-            background-image: url('../imagenes/ani.jpeg');
-            background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
-            background-repeat: no-repeat; /* Evita la repetición de la imagen */
-             }
-            
-             .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
-            background-color: #fff; /* Establece un color de fondo para la tabla */
-        }
+            body {
+                background-image: url('../imagenes/ani.jpeg');
+                background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
+                background-repeat: no-repeat; /* Evita la repetición de la imagen */
+            }
 
-        .styled-table th, .styled-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
+            .styled-table {
+                width: 100%;
+                border-collapse: collapse;
+                border: 1px solid #ddd;
+                background-color: #fff; /* Establece un color de fondo para la tabla */
+            }
 
-        .styled-table th {
-            background-color: #f2f2f2;
-        }
+            .styled-table th, .styled-table td {
+                padding: 10px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
 
-        .styled-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+            .styled-table th {
+                background-color: #f2f2f2;
+            }
 
-        .styled-table tr:hover {
-            background-color: #f2f2f2;
-        }
+            .styled-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            .styled-table tr:hover {
+                background-color: #f2f2f2;
+            }
 
             /* Estilos para botones */
             .styled-button {
@@ -119,7 +120,7 @@
                 width: 0px;
                 height: 0px;
             }
-            
+
             .bus{
                 background-color: #add8e6;
                 color: #333;
@@ -130,11 +131,14 @@
     </head>
     <body>
         <h1>Detalles del Doctor</h1>
+        <form action="servletpdfdoc" method="get" style="display: inline-block; margin-right: 10px;">
+            <input type="submit" value="Generar Reporte PDF ">
+        </form>
         <table class="styled-table">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>IDEspecialidad</th>
+                    <th>Especialidad</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
@@ -143,10 +147,10 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="doctor" items="${doctores}"  >
+                <c:forEach var="doctor" items="${doctores}">
                     <tr>
                         <td>${doctor.id}</td>
-                        <td>${doctor.idEspecialidad}</td>
+                         <td>${doctor.nombreEspecialidad}</td> 
                         <td>${doctor.firstname}</td>
                         <td>${doctor.lastname}</td>
                         <td>${doctor.dni}</td>
@@ -155,7 +159,8 @@
                             <form action="MainServlet1?action=ver" method="post">
                                 <input type="hidden" name="action" value="ver">
                                 <input type="hidden" name="id" value="${doctor.id}">
-                                <button type="submit" class="styled-button editar-button">Editar</button>
+                                    <input type="hidden" name="nombreEspecialidad" value="${doctor.nombreEspecialidad}">
+                                <button type="submit" class="styled-button editar-button" >Editar</button>
                             </form>
                             <form action="MainServlet1?action=select" method="post">
                                 <input type="hidden" name="action" value="select">
@@ -167,7 +172,7 @@
                 </c:forEach>
             </tbody>
         </table>
-        
+
         <form action="MainServlet1?action=mostrarEs" method="post">
             <input type="hidden" name="action" value="mostrarEs">
             <button type="submit" class="styled-button agregar-button">Agregar Doctor</button>

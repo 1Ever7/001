@@ -65,7 +65,7 @@ public class servletgpt extends HttpServlet {
  private void manejarPregunta(HttpServletRequest request, HttpServletResponse response, String pregunta)
             throws ServletException, IOException {
         // Llamar a la API para obtener la respuesta
-        String apiKey = "";
+        String apiKey = "AIzaSyBLqeqqh-GgIxy1gxP-p7kulRN9r1veiKc";
         String endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey;
 
         try {

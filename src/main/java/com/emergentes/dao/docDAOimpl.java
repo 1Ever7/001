@@ -89,14 +89,18 @@ public class docDAOimpl extends ConexionDB implements docDAO {
 
         try {
             conn = getConnection();
-            String sql = "SELECT * FROM doctor WHERE id = ?";
+            String sql = "select d.id, e.nombre AS nombreEspecialidad, d.firstname, d.lastname, d.dni, d.codi  "
+                    + "from doctor d "
+                    + "JOIN especialidad e ON d.id_especialidad = e.id "
+                    + " where d.id= ? ";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
                 doctor = new Doctor();
                 doctor.setId(rs.getInt("id"));
-                doctor.setIdEspecialidad(rs.getInt("id_especialidad"));
+                doctor.setNombreEspecialidad(rs.getString("nombreEspecialidad"));
+                //doctor.setIdEspecialidad(rs.getInt("id_especialidad"));
                 doctor.setFirstname(rs.getString("firstname"));
                 doctor.setLastname(rs.getString("lastname"));
                 doctor.setDni(rs.getString("dni"));
@@ -121,13 +125,16 @@ public class docDAOimpl extends ConexionDB implements docDAO {
         List<String> especia = new ArrayList<>();
         try {
             conn = getConnection();
-            String sql = "SELECT * FROM doctor";
+            String sql = "select d.id, e.nombre AS nombreEspecialidad, d.firstname, d.lastname, d.dni, d.codi  "
+                    + "from doctor d "
+                    + "JOIN especialidad e ON d.id_especialidad = e.id ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Doctor doctor = new Doctor();
                 doctor.setId(rs.getInt("id"));
-                doctor.setIdEspecialidad(rs.getInt("id_especialidad"));
+                doctor.setNombreEspecialidad(rs.getString("nombreEspecialidad"));
+                //doctor.setIdEspecialidad(rs.getInt("id_especialidad"));
                 doctor.setFirstname(rs.getString("firstname"));
                 doctor.setLastname(rs.getString("lastname"));
                 doctor.setDni(rs.getString("dni"));
@@ -173,9 +180,9 @@ public class docDAOimpl extends ConexionDB implements docDAO {
             rs = ps.executeQuery();
             if (rs.next()) {
                 idEspecialidad = rs.getInt("id");
-            }else {
-            throw new SQLException("La especialidad '" + nombreEspecialidad + "' no existe en la base de datos");
-        }
+            } else {
+                throw new SQLException("La especialidad '" + nombreEspecialidad + "' no existe en la base de datos");
+            }
         } catch (Exception e) {
             throw e;
         } finally {
@@ -184,30 +191,29 @@ public class docDAOimpl extends ConexionDB implements docDAO {
 
         return idEspecialidad;
     }
-    
-    
-public ArrayList<String> obtenerEspecialidades() throws SQLException, ClassNotFoundException {
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    ArrayList<String> especialidades = new ArrayList<>();
-    
-    try {
-        conn = getConnection();
-        String sql = "SELECT nombre FROM especialidad";
-        ps = conn.prepareStatement(sql);
-        rs = ps.executeQuery();
-        
-        while (rs.next()) {
-            especialidades.add(rs.getString("nombre"));
+
+    public ArrayList<String> obtenerEspecialidades() throws SQLException, ClassNotFoundException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<String> especialidades = new ArrayList<>();
+
+        try {
+            conn = getConnection();
+            String sql = "SELECT nombre FROM especialidad";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                especialidades.add(rs.getString("nombre"));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.desconectar(conn);
         }
-    } catch (Exception e) {
-        throw e;
-    } finally {
-        this.desconectar(conn);
+
+        return especialidades;
     }
-    
-    return especialidades;
-}
 
 }

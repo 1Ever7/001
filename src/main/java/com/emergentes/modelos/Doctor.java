@@ -6,8 +6,27 @@ public class Doctor {
     private String lastname;
     private String dni;
     private String codi;
+    private String nombreEspecialidad;
 
     public Doctor() {
+    }
+
+    public Doctor(int id, int idEspecialidad, String firstname, String lastname, String dni, String codi, String nombreEspecialidad) {
+        this.id = id;
+        this.idEspecialidad = idEspecialidad;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dni = dni;
+        this.codi = codi;
+        this.nombreEspecialidad = nombreEspecialidad;
+    }
+
+    public String getNombreEspecialidad() {
+        return nombreEspecialidad;
+    }
+
+    public void setNombreEspecialidad(String nombreEspecialidad) {
+        this.nombreEspecialidad = nombreEspecialidad;
     }
 
     public int getId() {

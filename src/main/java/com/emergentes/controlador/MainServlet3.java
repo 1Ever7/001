@@ -27,7 +27,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.*;
+//import java.*;
 
 
 @WebServlet(name = "MainServlet3", urlPatterns = {"/MainServlet3"})
@@ -68,32 +68,37 @@ public class MainServlet3 extends HttpServlet {
                 switch (action) {
                     case "mostrarEs":
                         mostrarEs(request,response,dao);
-                        break;
-                    case "insertar":
-                        insertarConsulta(request, dao);
-                        break;
-                    case "ver":
-                        mostrarConsulta(request, response , dao);
-                        break;
-                    case "actualizar":
-                        actualizarConsulta(request,dao);
-                        break;
-                    case "eliminar":
-                        eliminarConsulta(request,dao);
-                        break;
+                        return;
+                     case "insertar":
+                    insertarConsulta(request, dao);
+                    response.sendRedirect("MainServlet3"); // Redirect if necessary
+                    return;
+                case "ver":
+                    mostrarConsulta(request, response, dao);
+                    return;
+                case "actualizar":
+                    actualizarConsulta(request, dao);
+                    response.sendRedirect("MainServlet3"); // Redirect if necessary
+                    return;
+                case "eliminar":
+                    eliminarConsulta(request, dao);
+                    response.sendRedirect("MainServlet3"); // Redirect if necessary
+                    return;
                     case "select":
                         mostrarDetallesConsulta(request, response,dao);
-                        break;
+                        return;
                     case "buscar":
-                        busqueda(request,response, dao);
-                        
-                        break;
+                        busqueda(request,response, dao);   
+                        return;
+                    case "añadir":
+                        añadir(request,response, dao);   
+                        return;
                     default:
                         break;
                 }
             }
 
-            response.sendRedirect("MainServlet3");
+//            response.sendRedirect("MainServlet3");
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -139,7 +144,7 @@ public class MainServlet3 extends HttpServlet {
          
         //consultaDAOimpl dao = new consultaDAOimpl();
 
-//sk-proj-q2KIwqzAbqHWX3xXPihjT3BlbkFJeHxhLoV0XlQwjGUo4z4f  
+        //sk-proj-q2KIwqzAbqHWX3xXPihjT3BlbkFJeHxhLoV0XlQwjGUo4z4f  
 
         Consulta detalle = dao.getBynomape(id,medicalConsultaId,detalleConsultaId,nombrePaciente, lastName);
         request.setAttribute("detalles", detalle);
@@ -180,6 +185,9 @@ public class MainServlet3 extends HttpServlet {
         
         
     }
+    
+    
+    
     private void insertarConsulta(HttpServletRequest request,consultaDAOimpl dao) throws ClassNotFoundException, SQLException, Exception {
         try {
         String nombreEspecialidad = request.getParameter("nombre_especialidad");
@@ -209,6 +217,7 @@ public class MainServlet3 extends HttpServlet {
         detalles.setCel(celular);
         detalles.setGptcon(gptcon);
         detalles.setIdoc(idDoc);
+        
         dao.insert(detalles);
             
             
@@ -241,6 +250,7 @@ public class MainServlet3 extends HttpServlet {
         String treatment = request.getParameter("treatment");
         String celular = request.getParameter("celular");
         String gptcon = request.getParameter("analisis_medico");
+        
          
         
 
@@ -249,13 +259,14 @@ public class MainServlet3 extends HttpServlet {
         detalles.setNombrePaciente(firstName);
         detalles.setApellidoPaciente(lastName);
         detalles.setFechaConsulta(createDate);
+        detalles.setIdoc(idDoc);
+        detalles.setMedicalConsultaId(medicalConsultaId);
         detalles.setDiagnostico(diagnostic);
         detalles.setTratamiento(treatment);
         detalles.setCel(celular);
         detalles.setGptcon(gptcon);
-        detalles.setMedicalConsultaId(medicalConsultaId);
         detalles.setDetalleConsultaId(detalleConsultaId);
-        detalles.setIdoc(idDoc);
+       
         
             dao.update(detalles);
               } else {
@@ -315,4 +326,27 @@ public class MainServlet3 extends HttpServlet {
     
     
     }
+    
+    
+    
+    
+    private void añadir(HttpServletRequest request, HttpServletResponse response, consultaDAOimpl dao)
+            throws ServletException, IOException {
+    try {
+        
+        // Obtener la lista de pacientes
+        List<Paciente> pacientes = dao.getAllp();
+        
+        ArrayList<String> especialidad = dao.obtenerEspecialidades();
+        request.setAttribute("especialidades", especialidad);
+        // Guardar la lista de pacientes en el request para enviarla al JSP
+        request.setAttribute("pacientes", pacientes);
+        // Redirigir al JSP con el formulario de añadir consulta
+        request.getRequestDispatcher("CRUDcon/agregar.jsp").forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        // Manejar cualquier excepción aquí
+    }
+}
+
 }

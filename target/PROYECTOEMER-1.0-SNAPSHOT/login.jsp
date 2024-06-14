@@ -1,3 +1,7 @@
+<%@page import="com.emergentes.modelos.login"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,8 +10,8 @@
     <style>
         body {
              background-image: url('imagenes/ani.jpeg');
-            background-size: cover; /* Ajusta la imagen al tama�o de la ventana */
-            background-repeat: no-repeat; /* Evita la repetici�n de la imagen */
+            background-size: cover; /* Ajusta la imagen al tamaño de la ventana */
+            background-repeat: no-repeat; /* Evita la repetición de la imagen */
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             margin: 0;
@@ -76,9 +80,12 @@
         <form action="loginservlet" method="post">
             <label for="username">Usuario:</label><br>
             <input type="text" id="username" name="username"><br>
-            <label for="password">Contrase�a:</label><br>
+            <label for="password">Contraseña:</label><br>
             <input type="password" id="password" name="password"><br><br>
             <input type="submit" value="Login">
+            <label for="remember">Recordar Contraseña:</label>
+            <input type="checkbox" id="remember" name="remember">
+
         </form>
         <% if (request.getParameter("error") != null && request.getParameter("error").equals("true")) { %>
             <p class="error-message">Credenciales incorrectas</p>

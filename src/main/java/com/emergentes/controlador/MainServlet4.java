@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +37,7 @@ public class MainServlet4 extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+          try {
         String action = request.getParameter("action");
         especieDAOimpl dao = new especieDAOimpl();
         if (action != null) {
@@ -60,8 +63,13 @@ public class MainServlet4 extends HttpServlet {
             }
 
         }
+        
         response.sendRedirect("MainServlet4");
+         } catch (Exception ex) {
+            Logger.getLogger(MainServlet3.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
      private void insertarEspecialidad(HttpServletRequest request, especieDAOimpl dao) 
              throws ServletException, IOException {
         try {

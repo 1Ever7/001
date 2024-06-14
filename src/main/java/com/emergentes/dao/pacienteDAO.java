@@ -16,5 +16,7 @@ public interface pacienteDAO {
     public List<Paciente> getAll() throws Exception;
     
     public List<DetalleConsulta> getAnte(int id) throws Exception;
+    
+    
 
 }

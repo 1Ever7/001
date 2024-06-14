@@ -8,6 +8,7 @@ com\emergentes\modelos\updateConsulta.class
 com\emergentes\modelos\login.class
 com\emergentes\reportes\Servletpdf.class
 com\emergentes\dao\loginDAO.class
+com\emergentes\controlador\logout.class
 com\emergentes\dao\pacienteDAOimpl.class
 com\emergentes\dao\consultaDAO.class
 com\emergentes\controlador\MainServlet3.class
@@ -15,6 +16,7 @@ com\emergentes\controlador\userservlet.class
 com\emergentes\dao\especialidadDAO.class
 com\emergentes\modelos\DetalleConsulta.class
 com\emergentes\controlador\servletgpt1.class
+com\emergentes\controlador\servletpdfdoc.class
 com\emergentes\modelos\Doctor.class
 com\emergentes\modelos\Especialidad.class
 com\emergentes\dao\loginDAOimpl.class

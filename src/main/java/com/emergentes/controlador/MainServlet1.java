@@ -107,16 +107,17 @@ public class MainServlet1 extends HttpServlet {
               throws ServletException, IOException, ClassNotFoundException {
           try {
              int id = Integer.parseInt(request.getParameter("id"));
+             
         // Obtener el doctor específico por su ID
         Doctor doctor = dao.getById(id);
         // Obtener todas las especialidades disponibles
         ArrayList<String> especia = dao.obtenerEspecialidades();
-
+        
         // Establecer los atributos en el request
         request.setAttribute("doctor", doctor);
         request.setAttribute("especia", especia);
         
-
+        
         request.getRequestDispatcher("CRUD/EDITAR.jsp").forward(request, response);
           
         
@@ -132,7 +133,7 @@ public class MainServlet1 extends HttpServlet {
               throws ServletException, IOException, ClassNotFoundException {
           try {
                String nombreEspecialidad = request.getParameter("nombre_especialidad");
-        int idEspecialidad = dao.obtenerIdEspecialidad(nombreEspecialidad);
+                int idEspecialidad = dao.obtenerIdEspecialidad(nombreEspecialidad);
 
         if (idEspecialidad != 0) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -143,6 +144,7 @@ public class MainServlet1 extends HttpServlet {
 
             Doctor doctor = new Doctor();
             doctor.setId(id);
+            doctor.setNombreEspecialidad(nombreEspecialidad);
             doctor.setIdEspecialidad(idEspecialidad);
             doctor.setFirstname(nombre);
             doctor.setLastname(apellido);

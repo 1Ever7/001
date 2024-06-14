@@ -1,5 +1,7 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -65,40 +67,45 @@
 
     </head>
     <body>
+        <c:if test="${empty sessionScope.user}">
+            <%
+                response.sendRedirect("login.jsp");
+            %>
+        </c:if>
+        <c:if test="${not empty sessionScope.user}">
 
-
-        <div class="container" >
-            <div class="linea-vertical-container">
-                <div class="linea-vertical"></div>
-                <div class="fondo-color"></div>
-            </div>
-
-            <div class="menu">
-                <div class="image-container">
-                    <img src="imagenes/logo.png" alt="Imagen sin fondo" class="rotating-image">
+            <div class="container" >
+                <div class="linea-vertical-container">
+                    <div class="linea-vertical"></div>
+                    <div class="fondo-color"></div>
                 </div>
-                <h9>Menú Principal</h9>
-                <ul>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet1?action=doctor')">Administrar Doctores</a></li>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet2?action=paciente')">Administrar Pacientes</a></li>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet3?action=consulta')">Administrar Consultas Médicas</a></li>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet4?action=especie')">Especialidades</a></li>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/api/api.jsp')">Consulta a IA</a></li>
-                    <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/userservlet')">Agregar Usuario</a></li>
 
-                </ul>
-                <!-- Contenedor adicional para la línea y el fondo de color -->
+                <div class="menu">
+                    <div class="image-container">
+                        <img src="imagenes/logo.png" alt="Imagen sin fondo" class="rotating-image">
+                    </div>
+                    <h9>Menú Principal</h9>
+                    <ul>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet1?action=doctor')">Administrar Doctores</a></li>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet2?action=paciente')">Administrar Pacientes</a></li>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet3?action=consulta')">Administrar Consultas Médicas</a></li>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/MainServlet4?action=especie')">Especialidades</a></li>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/api/api.jsp')">Consulta a IA</a></li>
+                        <li><a href="javascript:cargarPagina('${pageContext.request.contextPath}/userservlet')">Agregar Usuario</a></li>
 
-            </div>
-            <div class="contenido" >
-                <iframe id="iframe" name="iframe" src="" width="100%" height="100%" style="background-image: url('../imagenes/ani.jpeg');"></iframe>
+                    </ul>
+                    <!-- Contenedor adicional para la línea y el fondo de color -->
 
-            </div>
-                    
-            <div class="login-container">
-                <a href="carga.jsp" class="login-button">exit</a>
-            </div>
+                </div>
+                <div class="contenido" >
+                    <iframe id="iframe" name="iframe" src="" width="100%" height="100%" style="background-image: url('../imagenes/ani.jpeg');"></iframe>
 
+                </div>
+
+                <div class="login-container">
+                    <a href="logout" class="login-button">Cerrar Seccion</a>
+                </div>
+            </c:if>
         </div>
     </body>
 </html>

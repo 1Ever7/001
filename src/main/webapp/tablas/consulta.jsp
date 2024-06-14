@@ -142,12 +142,22 @@
             <button class="styled-button bus" type="submit">Buscar</button>
         </form>
         <h1> </h1>
-        <form action="servletpdfmedi" method="get">
-            <input type="submit" value="Generar Reporte PDF Historial Medico">
-        </form>
-        <form action="servletconmed" method="get">
-            <input type="submit" value="Generar Reporte PDF Atencion Medica">
-        </form>
+        
+        <div>
+    <form action="servletpdfmedi" method="get" style="display: inline-block; margin-right: 10px;">
+        <input type="submit" value="Generar Reporte PDF Historial Medico">
+    </form>
+    <form action="servletconmed" method="get" style="display: inline-block; margin-right: 10px;">
+        <input type="submit" value="Generar Reporte PDF Atencion Medica">
+    </form>
+    <form action="MainServlet3?action=añadir" method="post" style="display: inline-block;">
+        <input type="hidden" name="action" value="añadir">
+        <button type="submit">Agregar Nuevo Paciente</button>
+    </form>
+</div>
+
+        <h1> </h1>
+        
         <c:if test="${not empty detalles}">
             <table class="styled-table">
                 <thead>
@@ -185,6 +195,7 @@
                                     <input type="hidden" name="detalleConsultaId" value="${detalle.detalleConsultaId}">
                                     <input type="hidden" name="firstname" value="${detalle.nombrePaciente}">
                                     <input type="hidden" name="lastname" value="${detalle.apellidoPaciente}">
+                                    
                                     <button class="styled-button editar-button" type="submit">Editar</button>
                                 </form>
                                 <form action="MainServlet3?action=select" method="post">

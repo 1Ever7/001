@@ -33,7 +33,7 @@ public class loginDAOimpl implements loginDAO {
         login user = null;
         String query = "select id,id_doctor,password1,tipo_usuario "
                 + "from usuario where id_doctor=(select doc.id from doctor as doc where codi= ?) and"
-                + "					password1= ?";
+                + "					password1= crypt( ? , password1)";
 
         try ( PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -58,7 +58,7 @@ public class loginDAOimpl implements loginDAO {
     @Override
     public login insert(login log) throws SQLException {
         String query = "insert into usuario (id_doctor, password1,tipo_usuario) "
-                + "values((select id from doctor where codi=?),?,?)";
+                + "values((select id from doctor where codi=?), crypt( ? , gen_salt('bf')),?)";
         try ( PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, log.getUsername());
             statement.setString(2, log.getPassword());
@@ -89,9 +89,9 @@ public class loginDAOimpl implements loginDAO {
 
     @Override
     public void update(login log) throws SQLException {
-        String query = "UPDATE usuario SET id_doctor = "
-                + "(select doc.id from doctor as doc where codi= ?),"
-                + " password1 = ?, tipo_usuario = ? WHERE id = ?";
+        String query = "UPDATE usuario SET id_doctor =  "
+                + "(select doc.id from doctor as doc where codi= ?), "
+                + " password1 = crypt(? , gen_salt('bf')), tipo_usuario = ? WHERE id = ?";
         try ( PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, log.getUsername());
             statement.setString(2, log.getPassword());
@@ -122,7 +122,7 @@ public class loginDAOimpl implements loginDAO {
             String sql = "SELECT u.id AS id, doc.codi, u.password1, u.tipo_usuario "
                     + "FROM usuario AS u "
                     + "INNER JOIN doctor doc ON u.id_doctor = doc.id "
-                    + "WHERE u.id = ?";
+                    + "WHERE u.id = ? ";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             rs = ps.executeQuery();
@@ -161,6 +161,7 @@ public class loginDAOimpl implements loginDAO {
         return log;
     }
 
+    
     
     
     }

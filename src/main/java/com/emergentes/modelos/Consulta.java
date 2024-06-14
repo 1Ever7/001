@@ -18,12 +18,12 @@ public class Consulta {
     private String cel;
     private String gptcon;
  private int idoc;
- 
+ private String espe;
  
     public Consulta() {
     }
 
-    public Consulta(int id, int medicalConsultaId, int detalleConsultaId, String nombrePaciente, String apellidoPaciente, Date fechaConsulta, String diagnostico, String tratamiento, String cel, String gptcon, int idoc) {
+    public Consulta(int id, int medicalConsultaId, int detalleConsultaId, String nombrePaciente, String apellidoPaciente, Date fechaConsulta, String diagnostico, String tratamiento, String cel, String gptcon, int idoc, String espe) {
         this.id = id;
         this.medicalConsultaId = medicalConsultaId;
         this.detalleConsultaId = detalleConsultaId;
@@ -35,12 +35,22 @@ public class Consulta {
         this.cel = cel;
         this.gptcon = gptcon;
         this.idoc = idoc;
+        this.espe= espe;
+    }
+
+    public String getEspe() {
+        return espe;
+    }
+
+    public void setEspe(String espe) {
+        this.espe = espe;
     }
 
     public int getId() {
         return id;
     }
 
+    
     public void setId(int id) {
         this.id = id;
     }
