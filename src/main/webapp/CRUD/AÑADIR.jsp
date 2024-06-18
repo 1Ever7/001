@@ -79,11 +79,50 @@
             margin-bottom: 20px;
         }
     </style>
+    
+    <script>
+    function validarFormulario() {
+        var error = "";
+        var nombreEspecialidad = document.getElementsByName("nombre_especialidad")[0];
+        var firstname = document.getElementsByName("firstname")[0];
+        var lastname = document.getElementsByName("lastname")[0];
+        var dni = document.getElementsByName("dni")[0];
+        var codi = document.getElementsByName("codi")[0];
+        var errorDiv = document.getElementById("errorDiv");
+
+        if (nombreEspecialidad.value === "") {
+            error += "Debe seleccionar una especialidad.\n";
+        }
+        if (firstname.value.trim() === "") {
+            error += "Debe ingresar el nombre del doctor.\n";
+        }
+        if (lastname.value.trim() === "") {
+            error += "Debe ingresar el apellido del doctor.\n";
+        }
+        if (dni.value.trim() === "") {
+            error += "Debe ingresar el DNI del doctor.\n";
+        }
+        if (codi.value.trim() === "") {
+            error += "Debe ingresar el código del doctor.\n";
+        }
+
+        if (error !== "") {
+            errorDiv.innerHTML = error;
+            errorDiv.style.display = "block";
+            return false; // Evita que el formulario se envíe
+        }
+
+        return true; // Permite que el formulario se envíe
+    }
+</script>
+
+
     </head>
     <body>
         <div class="form-container">
         <h1>Agregar Doctor</h1>
-        <form action="MainServlet1?action=insertar" method="post">
+        <form action="MainServlet1?action=insertar" method="post" onsubmit="return validarFormulario()">
+              <div id="errorDiv" style="display: none; color: red; margin-bottom: 10px;"></div>
             <input type="hidden" name="action" value="insertar">
 
             Especialidad:

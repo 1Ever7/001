@@ -81,11 +81,57 @@
             margin-bottom: 20px;
         }
     </style>
+    
+     <script>
+    function validarFormulario() {
+        var error = "";
+        var nombreEspecialidad = document.getElementsByName("nombre_especialidad")[0];
+        var createDate = document.getElementsByName("createdate")[0];
+        var diagnostic = document.getElementsByName("diagnostic")[0];
+        var treatment = document.getElementsByName("treatment")[0];
+        var celular = document.getElementsByName("celular")[0];
+        var analisisMedico = document.getElementsByName("analisis_medico")[0];
+        var errorDiv = document.getElementById("errorDiv");
+
+        if (nombreEspecialidad.value === "") {
+            error +="Por favor seleccione una especialidad.";
+            
+        }
+        if (createDate.value === "") {
+            error +="Por favor ingrese la fecha de creación.";
+            
+        }
+        if (diagnostic.value === "") {
+            error +="Por favor ingrese el diagnóstico.";
+            
+        }
+        if (treatment.value === "") {
+            error +="Por favor ingrese el tratamiento.";
+            
+        }
+        if (celular.value === "") {
+            error +="Por favor ingrese el número de celular.";
+            
+        }
+        if (analisisMedico.value === "") {
+            error +="Por favor ingrese el análisis médico.";
+            
+        }
+          if (error !== "") {
+            errorDiv.innerHTML = error;
+            errorDiv.style.display = "block";
+            return false; // Evita que el formulario se envíe
+        }
+        return true; // El formulario se envía si pasa todas las validaciones
+    }
+</script>
+    
     </head>
     <body>
         <div class="form-container">
         <h1>Detalles de la Consulta</h1>
         <form action="MainServlet3" method="post" onsubmit="return validarFormulario()">
+             <div id="errorDiv" style="display: none; color: red; margin-bottom: 10px;"></div>
             <input type="hidden" name="id" value="${detalles.id}">
             <input type="hidden" name="medicalConsultaId" value="${detalles.medicalConsultaId}">
             <input type="hidden" name="detalleConsultaId" value="${detalles.detalleConsultaId}">

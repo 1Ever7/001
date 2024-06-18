@@ -243,7 +243,10 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         ResultSet rs = null;
         try {
             conn = getConnection();
-            String sql = "SELECT p.id AS id , mc.id AS medicalConsultaId ,dc.id AS detalleConsultaId,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico, mc.id_doctor as idoc "
+            String sql = "SELECT p.id AS id , mc.id AS medicalConsultaId "
+                    + " ,dc.id AS detalleConsultaId,p.firstname,p.lastname,"
+                    + " mc.createdate, dc.diagnostic, dc.treatment,dc.celular, "
+                    + " dc.analisis_medico, mc.id_doctor as idoc "
                     + "FROM paciente p "
                     + "INNER JOIN medical_consulta mc ON p.id = mc.id_paciente "
                     + "INNER JOIN detalle_consulta dc ON mc.id = dc.id_medcon "
@@ -294,7 +297,8 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         List<String> especia = new ArrayList<>();
         try {
             conn = getConnection();
-            String sql = "SELECT p.id AS id,p.firstname,p.lastname, mc.createdate, dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico"
+            String sql = "SELECT p.id AS id,p.firstname,p.lastname, mc.createdate, "
+                    + " dc.diagnostic, dc.treatment,dc.celular,dc.analisis_medico"
                     + ",mc.id AS medicalConsultaId,dc.id AS detalleConsultaId,mc.id_doctor as idoc "
                     + "FROM paciente p "
                     + "INNER JOIN medical_consulta mc ON p.id = mc.id_paciente "
@@ -381,9 +385,9 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         try {
             conn = getConnection();
             String sql = "SELECT DISTINCT es.nombre "
-                    + "FROM especialidad es "
-                    + "INNER JOIN doctor doc ON es.id = doc.id_especialidad "
-                    + "INNER JOIN medical_consulta mc ON doc.id = mc.id_doctor";
+                    + "FROM especialidad es ";
+                    //+ "INNER JOIN doctor doc ON es.id = doc.id_especialidad ";
+                    //+ "INNER JOIN medical_consulta mc ON doc.id = mc.id_doctor";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -529,4 +533,35 @@ public class consultaDAOimpl extends ConexionDB implements consultaDAO {
         return pacientes;
     }
 
+    
+    
+    public boolean verificarExistenciaPaciente(String firstName, String lastName) throws SQLException, ClassNotFoundException {
+        boolean pacienteExiste = false;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        
+        try {
+            conn = getConnection(); // Obtener la conexión a la base de datos
+
+            String sql = "SELECT COUNT(*) AS count FROM paciente WHERE firstname = ? AND lastname = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                if (count > 0) {
+                    pacienteExiste = true;
+                }
+            }
+        } finally {
+         this.desconectar(conn);
+        }
+
+        return pacienteExiste;
+    }
+    
+    
 }

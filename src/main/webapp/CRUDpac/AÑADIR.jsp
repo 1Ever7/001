@@ -79,11 +79,56 @@
             margin-bottom: 20px;
         }
     </style>
+    
+    
+    
+    <script>
+    function validarFormulario() {
+        var error = "";
+        var nombre = document.getElementsByName("firstname")[0];
+        var apellido = document.getElementsByName("lastname")[0];
+        var dni = document.getElementsByName("dni")[0];
+        var numberclinicalhistory = document.getElementsByName("numberclinicalhistory")[0];
+        
+        var errorDiv = document.getElementById("errorDiv");
+
+        if (nombre.value === "") {
+            error +="Por favor ingrese nombre.";
+            
+        }
+        if (apellido.value === "") {
+            error +="Por favor ingrese apelldio.";
+            
+        }
+        if (dni.value === "") {
+            error +="Por favor ingrese el dni.";
+            
+        }
+        if (numberclinicalhistory.value === "") {
+            error +="Por favor ingrese numero de historia.";
+            
+        }
+        
+        
+          if (error !== "") {
+            errorDiv.innerHTML = error;
+            errorDiv.style.display = "block";
+            return false; // Evita que el formulario se envíe
+        }
+        return true; // El formulario se envía si pasa todas las validaciones
+    }
+</script>
+
+    
+    
+    
+    
     </head>
     <body>
         <div class="form-container">
         <h1>Agregar Paciente</h1>
-        <form action="../MainServlet2?action=insertar" method="post">
+        <form action="../MainServlet2?action=insertar" method="post" onsubmit="return validarFormulario()">
+            <div id="errorDiv" style="display: none; color: red; margin-bottom: 10px;"></div>
             <input type="hidden" name="action" value="insertar">
 
             Nombre: <input type="text" name="firstname"><br>

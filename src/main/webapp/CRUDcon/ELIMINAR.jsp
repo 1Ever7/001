@@ -81,6 +81,12 @@
             margin-bottom: 20px;
         }
     </style>
+    
+     <script>
+        function confirmarEliminacion() {
+            return confirm("¿Está seguro de que desea eliminar este doctor?");
+        }
+    </script>
     </head>
     <body>
         <div class="form-container">
@@ -94,7 +100,7 @@
             <p>Tratamiento : ${detalles.tratamiento}</p>
             <p>Celular : ${detalles.cel}</p>
             <p>Analisis IA : ${detalles.gptcon}</p>
-            <form action="MainServlet3?action=eliminar" method="post">
+            <form action="MainServlet3?action=eliminar" method="post" onsubmit="return confirmarEliminacion()">
                 <input type="hidden" name="action" value="eliminar">
                 
                 <input type="hidden" name="medicalConsultaId" value="${detalles.medicalConsultaId}">

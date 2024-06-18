@@ -58,7 +58,7 @@ public class loginDAOimpl implements loginDAO {
     @Override
     public login insert(login log) throws SQLException {
         String query = "insert into usuario (id_doctor, password1,tipo_usuario) "
-                + "values((select id from doctor where codi=?), crypt( ? , gen_salt('bf')),?)";
+                + " values((select id from doctor where codi = ? ), crypt( ?, gen_salt('bf')),  ?)";
         try ( PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, log.getUsername());
             statement.setString(2, log.getPassword());

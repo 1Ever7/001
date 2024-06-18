@@ -86,6 +86,42 @@
             color: #2980b9;
         }
     </style>
+    
+    <script>
+    function validarFormulario() {
+        var error = "";
+        var nombre = document.getElementsByName("codi")[0];
+        var apellido = document.getElementsByName("password1")[0];
+        var numberclinicalhistory = document.getElementsByName("tipo_usuario")[0];
+        
+        var errorDiv = document.getElementById("errorDiv");
+
+        if (nombre.value === "") {
+            error +="Por favor ingrese codigo de doctor.";
+            
+        }
+        if (apellido.value === "") {
+            error +="Por favor ingrese password.";
+            
+        }
+       
+        if (numberclinicalhistory.value === "") {
+            error +="Por favor ingrese tipo de usuario.";
+            
+        }
+        
+        
+          if (error !== "") {
+            errorDiv.innerHTML = error;
+            errorDiv.style.display = "block";
+            return false; // Evita que el formulario se envíe
+        }
+        return true; // El formulario se envía si pasa todas las validaciones
+    }
+</script>
+
+    
+    
 </head>
 <body>
     <div class="form-container">
@@ -96,7 +132,8 @@
                 <c:otherwise>Añadir Usuario</c:otherwise>
             </c:choose>
         </h1>
-        <form action="userservlet" method="post">
+        <form action="userservlet" method="post"onsubmit="return validarFormulario()">
+            <div id="errorDiv" style="display: none; color: red; margin-bottom: 10px;"></div>
             <input type="hidden" name="id" value="${log.id}">
             <label for="username">Usuario:</label>
             <input type="text" name="codi" value="${log.username}" 

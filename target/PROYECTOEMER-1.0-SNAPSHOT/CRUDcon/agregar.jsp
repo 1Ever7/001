@@ -14,12 +14,50 @@
             document.getElementById("lastname").value = selectedOption.dataset.lastname;
             document.getElementById("pacienteId").value = selectedOption.value;
         }
+        function validarFormulario() {
+            var error = "";
+            var selectPaciente = document.getElementById("selectPaciente");
+            var nombreEspecialidad = document.getElementsByName("nombre_especialidad")[0];
+            var createdate = document.getElementsByName("createdate")[0];
+            var diagnostic = document.getElementsByName("diagnostic")[0];
+            var treatment = document.getElementsByName("treatment")[0];
+            var celular = document.getElementsByName("celular")[0];
+            var analisisMedico = document.getElementsByName("analisis_medico")[0];
+
+            if (selectPaciente.value === "") {
+                error += "Debe seleccionar un paciente.\n";
+            }
+            if (nombreEspecialidad.value === "") {
+                error += "Debe seleccionar una especialidad.\n";
+            }
+            if (createdate.value === "") {
+                error += "Debe ingresar una fecha de creación.\n";
+            }
+            if (diagnostic.value.trim() === "") {
+                error += "Debe ingresar un diagnóstico.\n";
+            }
+            if (treatment.value.trim() === "") {
+                error += "Debe ingresar un tratamiento.\n";
+            }
+            if (celular.value.trim() === "") {
+                error += "Debe ingresar un número de celular.\n";
+            }
+            if (analisisMedico.value.trim() === "") {
+                error += "Debe ingresar un análisis médico.\n";
+            }
+
+            if (error !== "") {
+                alert(error);
+                return false;
+            }
+            return true;
+        }
     </script>
 </head>
 <body>
 
 <h1>Detalles de la Consulta</h1>
-<form action="MainServlet3?action=insertar" method="post">
+<form action="MainServlet3?action=insertar" method="post" onsubmit="return validarFormulario()">
     <input type="hidden" name="id" value="${detalles.id}">
     <input type="hidden" name="medicalConsultaId" value="${detalles.medicalConsultaId}">
     <input type="hidden" name="detalleConsultaId" value="${detalles.detalleConsultaId}">

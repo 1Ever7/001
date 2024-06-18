@@ -88,6 +88,49 @@
             background-color: #c0392b; /* Darker red on hover */
         }
     </style>
+    
+    
+     <script>
+        function confirmarEliminacion() {
+            return confirm("¿Está seguro de que desea eliminar este doctor?");
+        }
+        
+// Function to validate form fields
+function validateForm() {
+    // Get the values from the input fields
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    var role = document.getElementById('role').value;
+
+    // Check if username is not empty
+    if(username.trim() === '') {
+        alert('El campo de usuario es obligatorio.');
+        return false;
+    }
+
+    // Check if password meets length requirements
+    if(password.length < 6) {
+        alert('La contraseña debe tener al menos 6 caracteres.');
+        return false;
+    }
+
+    // Check if role is selected (assuming it's a dropdown)
+    if(role === '') {
+        alert('Por favor, seleccione un rol para el usuario.');
+        return false;
+    }
+
+    // Add more validation checks as needed
+
+    // If all checks pass, return true to allow form submission
+    return true;
+}
+
+// Attach the validateForm function to the form's onsubmit event
+document.getElementById('yourFormId').onsubmit = validateForm;
+
+    </script>
+    
 </head>
 <body>
     <h1>Lista de Usuarios</h1>
@@ -109,10 +152,10 @@
                     <td>${user.username}</td>
                     <td>${user.password}</td>
                     <td>${user.role}</td>
-                    <td class="actions">
-                        <a href="userservlet?action=edit&id=${user.id}" class="edit">Editar</a>
-                       <c:if test="${user.role != 'Admin'}">
-                            <a href="userservlet?action=delete&id=${user.id}" class="delete">Eliminar</a>
+                    <td class="actions" >
+                        <a href="userservlet?action=edit&id=${user.id}" class="edit" onclick="return validateEditForm();">Editar</a>
+                       <c:if test="${user.role != 'Admin'}" >
+                            <a href="userservlet?action=delete&id=${user.id}" class="delete" onclick="return confirmarEliminacion()">Eliminar</a>
                         </c:if>
                     </td>
                 </tr>

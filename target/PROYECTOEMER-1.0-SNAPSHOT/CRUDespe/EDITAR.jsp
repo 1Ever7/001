@@ -79,11 +79,32 @@
             margin-bottom: 20px;
         }
     </style>
+    
+     <script>
+    function validarFormulario() {
+        var error = "";
+        var nombre = document.getElementsByName("nombre")[0];
+        
+        if (nombre.value === "") {
+            error +="Por favor ingrese la especialidad.";
+            
+        }
+          if (error !== "") {
+            errorDiv.innerHTML = error;
+            errorDiv.style.display = "block";
+            return false; // Evita que el formulario se envíe
+        }
+        return true; // El formulario se envía si pasa todas las validaciones
+    }
+</script>
+
+
     </head>
     <body>
         <div class="form-container">
         <h1>Editar Doctor</h1>
-        <form action="MainServlet4?action=actualizar" method="post">
+        <form action="MainServlet4?action=actualizar" method="post"  onsubmit="return validarFormulario()" >
+            <div id="errorDiv" style="display: none; color: red; margin-bottom: 10px;"></div>
             <input type="hidden" name="action" value="actualizar">
             <input type="hidden" name="id" value="${especialidad.id}">
             <p>ID: ${especialidad.id}</p>
